@@ -13,6 +13,7 @@ sp = spotipy.Spotify(
         client_id=CLIENT_ID,
         client_secret=CLIENT_SECRET
     )
+)
 
 def question1(): # Which year is the song [SONGNAME] from?
     tracks = st.session_state.tracks
