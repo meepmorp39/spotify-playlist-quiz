@@ -152,7 +152,7 @@ def display_page():
     if st.session_state.page_state == 0:
         st.set_page_config(page_title="Spotify quiz game")
         st.title(':notes: Spotify playlist quiz')
-        st.write("This program is lightly inspired by iQuiz, a game on Apple iPods that quizzes you on random songs, albums and artists from your iPod library. This program does exactly that, but uses Spotify playlists instead. There are 10 questions, you get 3 lives, and do be warned there is auto-playing audio.\n\nTo begin testing your knowledge on the songs you like, enter a link to a Spotify playlist below! (P.S. the larger the playlist, the better the experience)")
+        st.write("This program is somewhat inspired by iQuiz, a game on Apple iPods that quizzes you on random songs, albums and artists from your iPod library. This program does exactly that, but uses Spotify playlists instead. There are 10 questions, you get 3 lives, and do be warned there is auto-playing audio.\n\nTo begin testing your knowledge on the songs you like, enter a link to a Spotify playlist below! (P.S. the larger the playlist, the better the experience)")
         playlist_link = st.text_input('Paste a playlist link here:')
         if st.button('Begin'):
             get_data(playlist_link)
