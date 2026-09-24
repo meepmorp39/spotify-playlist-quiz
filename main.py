@@ -11,7 +11,7 @@ load_dotenv() # Loads the environment variables from .env
 
 CLIENT_ID = os.getenv('CLIENT_ID')
 CLIENT_SECRET = os.getenv('CLIENT_SECRET')
-REDIRECT_URI = 'http://127.0.0.1:5000' # Local
+REDIRECT_URI = 'https://spotify-playlist-quiz-nu7oz95egnctomruc7r7ha.streamlit.app/' # Local
 
 # Spotify login
 sp = spotipy.Spotify(
