@@ -1,27 +1,18 @@
 import spotipy
-from spotipy.oauth2 import SpotifyOAuth
+from spotipy.oauth2 import SpotifyClientCredentials
 from spotify_preview import get_spotify_preview_url
 import streamlit as st
-from dotenv import load_dotenv
-import os
 import random
 import time
 
-load_dotenv() # Loads the environment variables from .env
+CLIENT_ID = st.secrets["CLIENT_ID"]
+CLIENT_SECRET = st.secrets["CLIENT_SECRET"]
 
-CLIENT_ID = os.getenv('CLIENT_ID')
-CLIENT_SECRET = os.getenv('CLIENT_SECRET')
-REDIRECT_URI = 'spotify-playlist-quiz-nd7ckdgeq9sab3dqnbc6fb'
-
-# Spotify login
 sp = spotipy.Spotify(
-    auth_manager=SpotifyOAuth(
+    auth_manager=SpotifyClientCredentials(
         client_id=CLIENT_ID,
-        client_secret=CLIENT_SECRET,
-        redirect_uri=REDIRECT_URI,
-        scope='playlist-read-private'
+        client_secret=CLIENT_SECRET
     )
-)
 
 def question1(): # Which year is the song [SONGNAME] from?
     tracks = st.session_state.tracks
