@@ -5,16 +5,14 @@ import streamlit as st
 import random
 import time
 
+# Spotify API keys
 CLIENT_ID = st.secrets["CLIENT_ID"]
 CLIENT_SECRET = st.secrets["CLIENT_SECRET"]
 
-sp = spotipy.Spotify(
-    auth_manager=SpotifyClientCredentials(
-        client_id=CLIENT_ID,
-        client_secret=CLIENT_SECRET
-    )
-)
+# Spotify authorisation
+sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=CLIENT_ID, client_secret=CLIENT_SECRET))
 
+# Questions 1-6 below
 def question1(): # Which year is the song [SONGNAME] from?
     tracks = st.session_state.tracks
     track = random.choice(tracks)
@@ -146,7 +144,7 @@ def generate_question():
     random.choice(list_of_questions)()
 
 
-# Displays the program's interface with Streamlit elements
+# Displays the program's interface with Streamlit
 def display_page():
     # Displays starting page
     if st.session_state.page_state == 0:
@@ -195,7 +193,7 @@ def display_page():
         if submitbutton:
             check_answer(selected_answer)
 
-    # Displays end page
+    # Displays winning page
     elif st.session_state.page_state == 2:
         st.subheader(":tada: You won!")
         if st.session_state.points == 10:
@@ -254,20 +252,24 @@ def get_data(playlist_link):
     try:
         playlist_ID = playlist_link.split('/')[-1].split('?')[0] # Isolates the playlist ID from the rest of the link
         results = sp.playlist_tracks(playlist_ID)
+        # Spotify returns paginated results and the max amount of tracks on one page is 100, so this loops through each 100
         while results:
-            for x in results['items']: # Loops through every track in the playlist, collecting and storing the data of each one
+            # Loops through the 100 tracks, reading the data of each one
+            for x in results['items']:
                 if x['track'] is None:
                     continue
                 if x['is_local'] == True:
                     continue
-                track_name = x['track']['name']
-                artist_name = x['track']['artists'][0]['name']
-                album_name = x['track']['album']['name']
-                album_cover = x['track']['album']['images'][0]['url']
-                album_year = x['track']['album']['release_date'].split('-')[0]
-                track_id = x['track']['id']
+                track_name = x['track']['name'] # List value: 0
+                artist_name = x['track']['artists'][0]['name'] # List value: 1
+                album_name = x['track']['album']['name'] # List value: 2
+                album_cover = x['track']['album']['images'][0]['url'] # List value: 3
+                album_year = x['track']['album']['release_date'].split('-')[0] # List value: 4
+                track_id = x['track']['id'] # List value: 5
                 st.session_state.tracks.append([track_name, artist_name, album_name, album_cover, album_year, track_id]) # Stores the data of a track in a list
+            # Goes to the next page of results if there are more than 100+ tracks in the playlist
             results = sp.next(results)
+    # Catches an error in inputting the playlist link
     except spotipy.exceptions.SpotifyException:
         st.error('Please enter a valid playlist link!')
 
@@ -291,4 +293,5 @@ if 'lives' not in st.session_state:
     st.session_state.lives = 3 # 
 if 'points' not in st.session_state:
     st.session_state.points = 0 #
+# Displays the page
 display_page()
